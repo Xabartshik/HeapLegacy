@@ -401,7 +401,7 @@ public:
         }
         else
         {
-        return m_data[index];
+            return m_data[index];
         }
     }
 

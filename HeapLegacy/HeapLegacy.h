@@ -158,27 +158,30 @@ public:
     class Iterator {
     private:
         size_t current_index;
-        const MaxHeapLegacy& heap; // Ссылка на кучу
+        MaxHeapLegacy& heap; // Ссылка на кучу
     public:
         // Конструктор итератора
-        Iterator(const MaxHeapLegacy& heap_n, size_t index = 0)
+        Iterator(MaxHeapLegacy& heap_n, size_t index = 0)
             : heap(heap_n), current_index(index) {}
         //Есть ли следующий элемент
         bool hasNext() const {
-            return current_index != data.size();
+            return current_index != heap.size();
         }
-        //Возвращает значение текущее итератора
-        T& operator*() {
-            return heap.data[current_index];
+        // Для const итератора
+        const T& operator*() const {
+            return heap[current_index];
         }
 
-        const T& operator*() const {
-            return heap.data[current_index];
+        // Возвращает значение текущее итератора
+        T& operator*() {
+            return heap[current_index];
         }
+
+
 
         //Возвращает значение текущее итератора
         T& data() const {
-            return heap.data[current_index];
+            return heap[current_index];
         }
         // Оператор инкремента
         Iterator& operator++() {
@@ -256,7 +259,17 @@ public:
 
 
         VectorLegacy<int> initialElements = { 5, 3, 8, 2, 1, 4, 7 };
+        VectorLegacy<int> rightElements = { 8, 3, 7, 2, 1, 4, 5};
         MaxHeapLegacy<int> Heap(initialElements);
+        size_t i = 0;
+        for (int value : Heap) {
+            assert(value == rightElements[i]);
+            i++;
+        }
+        auto it = Heap.begin();
+        it.next();
+        auto it2 = Heap.begin();
+        assert(it != it2);
 
         assert(Heap.size() == initialElements.size());
         assert(Heap.top() == 8);

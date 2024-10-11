@@ -49,6 +49,18 @@ int main() {
     doubleHeap.popLast();
     doubleHeap.printTree();
     cout << endl;
+    for (double value : doubleHeap) {
+        std::cout << value << " ";
+    }
+
+    for (auto it = doubleHeap.begin(); it != doubleHeap.end(); ++it) {
+        *it *= 10;
+    }
+
+    for (double value : doubleHeap) {
+        std::cout << value << " ";
+    }
+
 
     return 0;
 }
