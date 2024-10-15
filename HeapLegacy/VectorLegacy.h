@@ -95,10 +95,10 @@ protected:
 
 
 
-      // Функция для увеличения вместимости массива
+    // Функция для увеличения вместимости массива
     void resize() {
         // Получаем доступ к свободной оперативной памяти. Считаем, сколько еще элементов массива она может вместить в себя
-        size_t free_memory = GetFreeMemory()/sizeof(T);
+        size_t free_memory = GetFreeMemory() / sizeof(T);
 
         // Вычисляем 5% от размера оперативной памяти
         size_t memory_limit = free_memory / 100;
@@ -127,13 +127,13 @@ protected:
 
 
 
-      // Функция для перемещения элементов вправо
+    // Функция для перемещения элементов вправо
     void shift_right(size_t index, size_t count) {
         if (m_size + count > m_capacity)
         {
             throw(out_of_range("Not enough capacity to shift"));
         }
-    //Не использую memcpy или copy_n во избежание наложения данных друг на друга
+        //Не использую memcpy или copy_n во избежание наложения данных друг на друга
         for (size_t i = m_size - 1; i >= index + count; --i) {
             m_data[i + count] = m_data[i];
         }
@@ -193,9 +193,10 @@ protected:
         return m_sorted;
     }
 
+
 public:
-//-----------------------------------ПРАВИЛО ПЯТИ--------------------------------
-    // Конструктор по умолчанию
+    //-----------------------------------ПРАВИЛО ПЯТИ--------------------------------
+        // Конструктор по умолчанию
     VectorLegacy() {
         m_size = 0;
         m_capacity = 0;
@@ -221,7 +222,7 @@ public:
     // Конструктор с указанием размера. Если не указать, каким значением заполнять, заполнится 0
     VectorLegacy(size_t n, const T& value = 0) {
         m_size = n;
-        m_capacity = n*2;
+        m_capacity = n * 2;
         m_data = new T[m_capacity];
         for (size_t i = 0; i < n; ++i) {
             m_data[i] = value;
@@ -237,7 +238,7 @@ public:
         m_capacity = n;
         m_data = new T[n];
         //copy_n(data, n, m_data);
-        copy(data, data+n, m_data);
+        copy(data, data + n, m_data);
         m_sorted = isSorted();
         //memcpy(m_data, data, n * sizeof(T));
     }
@@ -362,12 +363,12 @@ public:
     ~VectorLegacy() {
         if (m_data != nullptr)
         {
-        delete[] m_data;
+            delete[] m_data;
         }
     }
-//----------------------------------------------------------------------------------------
-    //Оператор сравнения
-    bool operator==(const VectorLegacy<T>& other) const 
+    //----------------------------------------------------------------------------------------
+        //Оператор сравнения
+    bool operator==(const VectorLegacy<T>& other) const
     {
         if (m_size != other.m_size) {
             return false;
@@ -393,7 +394,23 @@ public:
             return m_data[index];
         }
     }
-    
+
+
+    //Проверка сортированности массива по убываению.
+    bool isSortedDown()
+    {
+        for (size_t i = 1; i < m_size; i++)
+        {
+            if (m_data[i] > m_data[i - 1])
+            {
+                m_sorted = false;
+                return m_sorted;
+            }
+        }
+        m_sorted = true;
+        return m_sorted;
+    }
+
     const T& operator[](size_t index) const {
         if (index > m_size)
         {
@@ -414,16 +431,16 @@ public:
     size_t capacity() const {
         return m_capacity;
     }
-    
+
     bool sorted() const
     {
         return m_sorted;
     }
 
-//----------------------------------------------------------------Добавление и удаление элементов--------------------------------------------------
-    // Добавление элемента в конец
-    // Средний: O(1)
-    // Худший: О(n)
+    //----------------------------------------------------------------Добавление и удаление элементов--------------------------------------------------
+        // Добавление элемента в конец
+        // Средний: O(1)
+        // Худший: О(n)
     void push_back(const T& value) {
         if (m_size == m_capacity) {
             resize();
@@ -439,7 +456,7 @@ public:
         //Если размер в четыре раза меньше емкости, уменьшаем емкость в 2 раза
         if (m_size <= (m_capacity / 4))
         {
-            this->resize(m_capacity/2); 
+            this->resize(m_capacity / 2);
         }
         return result;
     }
@@ -503,7 +520,7 @@ public:
         // Копирование данных из array
         //copy_n(array, count, m_data + index, count);
         //memcpy(m_data + index, array, count * sizeof(T));
-        copy(array, array+count, m_data+index);
+        copy(array, array + count, m_data + index);
         m_size = new_size;
         m_sorted = false;
     }
@@ -573,8 +590,8 @@ public:
 
         m_size -= count;
     }
-//-----------------------------------------------------------------------------------------------------------------------------------
-    // Печать элементов
+    //-----------------------------------------------------------------------------------------------------------------------------------
+        // Печать элементов
     void print() const {
         //Выводит последний элемент
         cout << "[";
@@ -600,7 +617,7 @@ public:
 
     // Доступ к элементу по индексу
     T& at(size_t index) {
-        if (index > m_size) 
+        if (index > m_size)
         {
             throw out_of_range("Tried to access to index out of range (array size)");
         }
@@ -636,7 +653,7 @@ public:
             throw std::runtime_error("Array is not sorted");
         }
 
-        if (m_size == 0  || m_data[0] > value  || m_data[m_size - 1] < value) {
+        if (m_size == 0 || m_data[0] > value || m_data[m_size - 1] < value) {
             return m_size;
         }
 
@@ -681,7 +698,7 @@ public:
         {
             return seek_interpol(value);
         }
-            
+
     }
     //Средний, Худший: O(n*n), Лучший О(n)
     //Сортировка вставками. Необходима для сортировки
@@ -804,11 +821,11 @@ public:
     {
         if (size() < 1000000)
         {
-            sort_quick(0, size()-1);
+            sort_quick(0, size() - 1);
         }
         else
         {
-            sort_merge(0, size()-1);
+            sort_merge(0, size() - 1);
         }
         m_sorted = true;
     }
@@ -979,7 +996,7 @@ void test() {
     assert(v1 == VectorLegacy<int>({ 1, 2, 3, 4, 5 }));
     v1.print();
     v1 = { 1, 5 };
-    v1.insert(1, {2, 3, 4});
+    v1.insert(1, { 2, 3, 4 });
     v1.print();
     assert(v1 == VectorLegacy<int>({ 1, 2, 3, 4, 5 }));
 

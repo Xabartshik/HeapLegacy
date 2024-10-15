@@ -5,8 +5,11 @@
 #include <cassert>
 #include <stdexcept>
 
+//Ошлаков Данил, ИВТ-22
+
 using namespace std;
 template <typename T>
+//Класс максимальной кучи на основе маассива VectorLegacy
 class MaxHeapLegacy {
 public:
     // Конструктор по умолчанию
@@ -115,7 +118,7 @@ public:
     {
         return data.size();
     }
-
+    //Куча пуста
     bool empty() const
     {
         return data.empty();
@@ -129,7 +132,7 @@ public:
 
     // Удаление элемента по индексу
     void remove(size_t index) {
-        if (empty())             
+        if (empty())
             throw out_of_range("Tried to access empty heap");
         if (index >= data.size())
             throw out_of_range("Index out of range"); // Проверяем, что индекс в пределах кучи
@@ -154,7 +157,7 @@ public:
         }
     }
 
-
+    //Итератор, проходящий дерево в ширину
     class Iterator {
     private:
         size_t current_index;
@@ -229,6 +232,19 @@ public:
         return Iterator(*this, data.size());
     }
 
+    //Кучей сортировка по убыванию
+    static void heapSort(VectorLegacy<T>& arr)
+    {
+        MaxHeapLegacy heap;
+        for (int value : arr)
+        {
+            heap.push(value);
+        }
+        for (size_t i = 0; i < arr.size(); i++)
+        {
+            arr[i] = heap.pop();
+        }
+    }
 
     // Функция тестирования
     static void testMaxHeap() {
@@ -250,6 +266,16 @@ public:
         // Тест построения кучи из массива
         VectorLegacy<int> arr = { 5, 3, 17, 10, 12, 8, 22 };
         MaxHeapLegacy<int> heapFromArray(arr);
+        assert(arr.isSortedDown() == false);
+        //Проверка работы турнирной сортировки
+        MaxHeapLegacy<int>::heapSort(arr);
+        assert(arr.isSortedDown() == true);
+        VectorLegacy<int> arr2 = { 9, 5, 4, 3, 2, 1, 0, -1 };
+
+        MaxHeapLegacy<int>::heapSort(arr2);
+        assert(arr2.isSortedDown() == true);
+        VectorLegacy<int> arr8 = { 1, 2, 3, 4, 5,6,7,8 };
+        MaxHeapLegacy<int>::heapSort(arr8);
         assert(heapFromArray.top() == 22);
 
         // Тест перегруженного оператора присваивания
@@ -259,7 +285,7 @@ public:
 
 
         VectorLegacy<int> initialElements = { 5, 3, 8, 2, 1, 4, 7 };
-        VectorLegacy<int> rightElements = { 8, 3, 7, 2, 1, 4, 5};
+        VectorLegacy<int> rightElements = { 8, 3, 7, 2, 1, 4, 5 };
         MaxHeapLegacy<int> Heap(initialElements);
         size_t i = 0;
         for (int value : Heap) {
@@ -343,7 +369,8 @@ private:
     // Восстановление свойств кучи (max-heap) снизу-вверх
     void heapifyUp(int index) {
         // Пока индекс элемента не равен 0 (корень)
-        // и значение элемента больше значения родителя
+        // и значение элемента больше значения родителя data[index]
+        //(index - 1) / 2 -- вычисление родителя по индексу текущего элемента
         while (index > 0 && data[(index - 1) / 2] < data[index]) {
             // Меняем местами элемент и его родителя
             swap(data[index], data[(index - 1) / 2]);
